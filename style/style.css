@@ -146,6 +146,10 @@ button {
   box-shadow: 1px 2px 5px 0 rgba(174, 174, 174, 0.75);
   display: flex;
   flex-direction: column;
+  transition: box-shadow 0.5s linear;
+}
+.card:hover{
+  box-shadow: 5px 5px 5px 0 rgba(174, 174, 174, 1);
 }
 .card__image {
   border: 1px solid #ccc;
@@ -183,7 +187,10 @@ button {
   max-width: 600px;
   margin: 30px;
   position: relative;
+  animation-name: modal__block__appear;
+  animation-duration: 0.5s;
 }
+
 .modal__image {
   max-width: 200px;
   border: 1px solid #ccc;
@@ -267,4 +274,9 @@ button {
   }
 }
 
+
+@keyframes modal__block__appear {
+  from {top:-320px; opacity:0}
+  to {top:0; opacity:1}
+}
 /*# sourceMappingURL=style.css.map */
