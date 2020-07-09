@@ -44,6 +44,7 @@ const closeModal = function (event) {
         modalSubmit.reset(); //очищаем форму
         modalBtnSubmit.disabled = true; // блокируем кнопку
         modalBtnWarning.style.display = ''; //восстанавливаем предупреждающую надпись
+        modalAdd.classList.add('hide'); //закрываем модальное окно
     }
 }
 
