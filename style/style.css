@@ -78,6 +78,7 @@ button {
   margin-left: auto;
   margin-bottom: 15px;
   display: block;
+  transition: background-color 0.5s linear;
 }
 .btn:hover {
   background-color: #009cf0;
@@ -188,7 +189,7 @@ button {
   margin: 30px;
   position: relative;
   animation-name: modal__block__appear;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
 }
 
 .modal__image {
@@ -259,6 +260,7 @@ button {
   border-color: transparent;
   font-size: 24px;
   line-height: 24px;
+  transition: color 0.3s linear;
 }
 .modal__close:hover {
   color: #009cf0;

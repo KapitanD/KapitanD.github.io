@@ -1,6 +1,6 @@
 'use strict';
 
-const database = [];
+const database = []; //массив для сохранения поданых объявлений
 
 //получаем объекты разметки по классам
 const modalAdd = document.querySelector('.modal__add'),
@@ -59,19 +59,19 @@ catalog.addEventListener('click', event => { //обработка нажатия
     }
 });
 
-modalSubmit.addEventListener('input', () => {
-    const validForm = elementsModalSubmit.every(elem => elem.value);
-    modalBtnSubmit.disabled = !validForm;
-    modalBtnWarning.style.display = validForm ? 'none' : '';
+modalSubmit.addEventListener('input', () => { //обработка события изменения формы
+    const validForm = elementsModalSubmit.every(elem => elem.value); //проверка всех елементов формы на заполненность
+    modalBtnSubmit.disabled = !validForm; //разблокируем кнопку, если все заполненно
+    modalBtnWarning.style.display = validForm ? 'none' : ''; //скрываем предупредительную надпись если все заполненно
 });
 
-modalSubmit.addEventListener('submit', event => {
-    event.preventDefault();
-    const itemObj = {};
-    for(const elem of elementsModalSubmit){
-        itemObj[elem.name] = elem.value;
+modalSubmit.addEventListener('submit', event => { //обработка события отправки формы
+    event.preventDefault(); //отключаем стандартное поведение
+    const itemObj = {}; //временный объект для значений элементов формы
+    for(const elem of elementsModalSubmit){ //пробегаем по всем элементам формы
+        itemObj[elem.name] = elem.value; //складываем во временный объект название элемента формы и его значение
     }
-    database.push(itemObj);
+    database.push(itemObj); //добавляем полученный объект в массив
 });
 
 modalItem.addEventListener('click', closeModal); //обработка нажатия на modalItem
