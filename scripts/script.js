@@ -11,42 +11,45 @@ const modalAdd = document.querySelector('.modal__add'),
     catalog = document.querySelector('.catalog'),
     modalBtnWarning = document.querySelector('.modal__btn-warning');
 
-const elementsModalSubmit =  [...modalSubmit.elements]
+const elementsModalSubmit = [...modalSubmit.elements]
     .filter(elem => elem.tagName !== 'BUTTON'); //элементы формы
 
 
-
+//функция закрытия модального окна
 const closeModal = function (event) {
-    //функция закрытия модального окна при клике по крестику или вне модального окна
-    const target = event.target;
+    //проверяем тип события
+    if (event.type === 'click') { //по клику вне модального окна или по крестику закрываем
+        const target = event.target;
 
-    if (target.classList.contains('modal__close') ||
-        target === this) {
-        // при нажатии на крестик или вне блока модального окна
-        this.classList.add('hide'); //скрываем модальное окно
-        if (this === modalAdd){
-            modalSubmit.reset(); //при закрытии модального окна modalAdd очищаем форму
+        if (target.classList.contains('modal__close') ||
+            target === this) {
+            // при нажатии на крестик или вне блока модального окна
+            this.classList.add('hide'); //скрываем модальное окно
+            if (this === modalAdd) {
+                modalSubmit.reset(); //при закрытии модального окна modalAdd очищаем форму
+            }
+            document.body.removeEventListener('keydown', closeModal); //удаляем обработчик события нажатия на Esc
         }
-        document.body.removeEventListener('keydown', closeModalEsc); //удаляем обработчик события нажатия на Esc
+    }
+    if (event.type === 'keydown') { //по нажатию esc закрываем
+        if (event.key === 'Escape') {
+            //скрываем оба модальных окна
+            modalItem.classList.add('hide');
+            modalAdd.classList.add('hide');
+            modalSubmit.reset(); //при закрытии модального окна очищаем форму
+            document.body.removeEventListener('keydown', closeModal); //удаляем обработчик события нажатия на Esc
+        }
+    }
+    if (event.type === 'submit') { //при отправке формы очищаем форму и блокируем кнопку отправить 
+        modalSubmit.reset(); //очищаем форму
+        modalBtnSubmit.disabled = true; // блокируем кнопку
+        modalBtnWarning.style.display = ''; //восстанавливаем предупреждающую надпись
     }
 }
-
-const closeModalEsc = event => {
-    //функция закрытия модальных окон по нажатию esc
-    if (event.key === 'Escape') {
-        //скрываем оба модальных окна
-        modalItem.classList.add('hide');
-        modalAdd.classList.add('hide');
-        modalSubmit.reset(); //при закрытии модального окна очищаем форму
-        document.body.removeEventListener('keydown', closeModalEsc); //удаляем обработчик события нажатия на Esc
-    }
-}
-
-
 
 addAd.addEventListener('click', () => { //обработка нажатия на "подать объявления"
     modalAdd.classList.remove('hide'); //раскрываем модальное окно добавления объявления
-    document.body.addEventListener('keydown', closeModalEsc); //при открытии добавляем обработчик события нажатия на Esc
+    document.body.addEventListener('keydown', closeModal); //при открытии добавляем обработчик события нажатия на Esc
     modalBtnSubmit.disabled = true; //блокируем кнопку "отправить"
 });
 
@@ -55,7 +58,7 @@ catalog.addEventListener('click', event => { //обработка нажатия
 
     if (target.closest('.card')) { //если кликнули внутри карточки (один из родителей target является card)
         modalItem.classList.remove('hide'); //раскрываем модальное окно покупки
-        document.body.addEventListener('keydown', closeModalEsc); //при открытии добавляем обработчик события нажатия на Esc
+        document.body.addEventListener('keydown', closeModal); //при открытии добавляем обработчик события нажатия на Esc
     }
 });
 
@@ -68,10 +71,12 @@ modalSubmit.addEventListener('input', () => { //обработка событи�
 modalSubmit.addEventListener('submit', event => { //обработка события отправки формы
     event.preventDefault(); //отключаем стандартное поведение
     const itemObj = {}; //временный объект для значений элементов формы
-    for(const elem of elementsModalSubmit){ //пробегаем по всем элементам формы
+    for (const elem of elementsModalSubmit) { //пробегаем по всем элементам формы
         itemObj[elem.name] = elem.value; //складываем во временный объект название элемента формы и его значение
     }
     database.push(itemObj); //добавляем полученный объект в массив
+    closeModal(event); //используем для восстановления формы в исходное состояние
+    console.log(database); //проверяем, попал ли item в database
 });
 
 modalItem.addEventListener('click', closeModal); //обработка нажатия на modalItem
